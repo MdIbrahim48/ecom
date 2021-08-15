@@ -68,8 +68,33 @@
           </div><!-- menu-item -->
         </a><!-- sl-menu-link -->
         <ul class="sl-menu-sub nav flex-column">
-          <li class="nav-item"><a href="{{url('admin/category-add')}}" class="nav-link">Category Add</a></li>
-          <li class="nav-item"><a href="{{url('admin/category-list')}}" class="nav-link">Category List</a></li>
+          <li class="nav-item"><a href="{{route('categoryAdd')}}" class="nav-link">Category Add</a></li>
+          <li class="nav-item"><a href="{{route('categoryList')}}" class="nav-link">Category List</a></li>
+          <li class="nav-item"><a href="{{route('trashList')}}" class="nav-link">Trush List</a></li>
+        </ul>
+        <a href="#" class="sl-menu-link">
+          <div class="sl-menu-item">
+            <i class="menu-item-icon ion-ios-pie-outline tx-20"></i>
+            <span class="menu-item-label">Sub Category</span>
+            <i class="menu-item-arrow fa fa-angle-down"></i>
+          </div><!-- menu-item -->
+        </a><!-- sl-menu-link -->
+        <ul class="sl-menu-sub nav flex-column">
+          <li class="nav-item"><a href="{{route('subCategoryAdd')}}" class="nav-link">Sub Category Add</a></li>
+          <li class="nav-item"><a href="{{route('subCategoryList')}}" class="nav-link">Sub Category List</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Sub Category Trush List</a></li>
+        </ul>
+        <a href="#" class="sl-menu-link">
+          <div class="sl-menu-item">
+            <i class="menu-item-icon ion-ios-pie-outline tx-20"></i>
+            <span class="menu-item-label">Product</span>
+            <i class="menu-item-arrow fa fa-angle-down"></i>
+          </div><!-- menu-item -->
+        </a><!-- sl-menu-link -->
+        <ul class="sl-menu-sub nav flex-column">
+          <li class="nav-item"><a href="{{route('productAdd')}}" class="nav-link">Product Add</a></li>
+          <li class="nav-item"><a href="{{route('productList')}}" class="nav-link">Product List</a></li>
+          <li class="nav-item"><a href="#" class="nav-link">Product Trush List</a></li>
         </ul>
         <a href="#" class="sl-menu-link">
           <div class="sl-menu-item">
@@ -392,5 +417,11 @@
     <script src="{{asset('assets/js/starlight.js')}}"></script>
     <script src="{{asset('assets/js/ResizeSensor.js')}}"></script>
     <script src="{{asset('assets/js/dashboard.js')}}"></script>
+    @yield('footer_js')
+    <script>
+      $('#checkAll').click(function () {
+        $('input:checkbox').not(this).prop('checked',this.checked);
+      });
+    </script>
   </body>
 </html>

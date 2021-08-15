@@ -3,7 +3,7 @@
 <div class="sl-mainpanel">
     <nav class="breadcrumb sl-breadcrumb">
       <a class="breadcrumb-item" href="index.html">Starlight</a>
-      <span class="breadcrumb-item active">Dashboard</span>
+      <span class="breadcrumb-item active text-capitalize">{{$last??''}}</span>
     </nav>
 
     <div class="sl-pagebody">
@@ -19,46 +19,48 @@
                   <span>{{Session('delete')}}</span>
                 </div>
             @endif
-                <h6 class="card-body-title">Category List</h6>
-                <h5 class="text-center">All Category {{$cat_count}}</h5>
-                <div class=""><a href="{{url('admin/category-add')}}" class="btn pull-right"><i class="fa fa-plus"></i> Add Category</a></div>
+                <h6 class="card-body-title">Product List</h6>
+                <h5 class="text-center">All Product </h5>
+                <div class=""><a href="{{route('productAdd')}}" class="btn pull-right"><i class="fa fa-plus"></i> Add Product</a></div>
                 <div class="table-responsive">
-                <table class="table mg-b-0">
-                    <form action="{{url('admin/selected/category-deleted')}}" method="post"> 
+                <table class="table mg-b-0"> 
                     <thead>
                     <tr>
-                        <th>
-                          <button type="submit" class="btn btn-danger">Delete</button>
-                          <input type='checkbox' id="checkAll" value="All">All
-                        </th>
                         <th>Id</th>
-                        <th>Category Name</th>
-                        <th>Total Product</th>
+                        <th>Product Name</th>
+                        <th>Slug</th>
+                        <th>Summary</th>
+                        <th>Category</th>
+                        {{-- <th>Description</th> --}}
+                        <th>Price</th>
+                        <th>Thumbnail</th>
                         <th>Created</th>
                         <th>Updated</th>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
-                    @csrf
-                    @foreach($categories as $key => $category)
+                    @foreach($products as $key => $product)
                       <tbody>
                           <tr>
-                            <td><input type="checkbox" name="delete[]" value="{{$category->id}}"></td>
-                            <td>{{$categories->firstItem() + $key}}</td>
-                            <td>{{$category->category_name}}</td>
-                            <td>{{$category->product->count()}}</td>
-                            <td>{{$category->created_at != null ? $category->created_at->diffForHumans():'N/A'}}</td>
-                            <td>{{$category->updated_at != null ? $category->updated_at->diffForHumans():'N/A'}}</td>
+                            <td>{{$products->firstItem() + $key}}</td>
+                            <td>{{$product->title}}</td>
+                            <td>{{$product->slug}}</td>
+                            <td>{{Str::limit($product->summary,20)}}</td>
+                            <td>{{$product->category->category_name}}</td>
+                            {{-- <td>{{$product->description	}}</td> --}}
+                            <td>{{$product->price	}}</td>
+                            <td><img width="100" src="{{asset('images/'.$product->created_at->format('Y/m/').$product->id.'/'.$product->thumbnail)}}" alt="{{$product->title}}"></td>
+                            <td>{{$product->created_at != null ? $product->created_at->diffForHumans():'N/A'}}</td>
+                            <td>{{$product->updated_at != null ? $product->updated_at->diffForHumans():'N/A'}}</td>
                             <td class="text-center">
-                                <a href="{{url('admin/category-edit')}}/{{$category->id}}" class="btn btn-outline-primary">Edit</a>
-                                <a href="{{url('admin/category-delete')}}/{{$category->id}}" onclick="return confirm('Are You Deleted?')" class="btn btn-outline-danger">Delete</a>
+                                <a href="{{route('productEdit',$product->id)}}" class="btn btn-outline-primary">Edit</a>
+                                {{-- <a href="{{route('subCategoryDelete',$subcategory->id)}}" onclick="return confirm('Are You Deleted?')" class="btn btn-outline-danger">Delete</a> --}}
                             </td>
                         </tr>
                       </tbody>
                     @endforeach
-                    </form>
                 </table>
-                {{$categories->links()}}
+                {{-- {{$subcategories->links()}} --}}
                 </div>
             </div><!-- card -->
            

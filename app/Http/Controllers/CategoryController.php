@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
- 
+use Str;
 class CategoryController extends Controller
 {
     public function categoryList(){
@@ -30,6 +30,7 @@ class CategoryController extends Controller
 
         $cat = new Category;
         $cat->category_name = $request->category_name;
+        $cat->slug = Str::slug($request->slug);
         $cat->save();
         return redirect('admin/category-list')->with('success','Category Added Successfully ');
     }
@@ -38,6 +39,11 @@ class CategoryController extends Controller
         return view('backend/category/category_edit',compact('category'));
     }
     public function categoryUpdate(Request $request){
+        $request->validate([
+            'category_name' => 'required|min:3|max:50|unique:categories',
+        ],[
+            'category_name.required' => 'Please Enter Category Name '
+        ]);
         // Category::findOrFail($request->category_id)->update([
         //     'category_name' => $request->category_name
         // ]);
@@ -50,5 +56,25 @@ class CategoryController extends Controller
     public function categoryDelete($id){
         Category::findOrFail($id)->delete();
         return back()->with('delete','Category Deleted Successfully');
+    }
+    public function trashList(){
+        $trash_list = Category::onlyTrashed()->paginate();
+        return view('backend.category.trash_list',[
+            'trash_list' => $trash_list
+        ]);
+    }
+    public function trashRestore($id){
+        Category::onlyTrashed()->findOrFail($id)->restore();
+        return back()->with('success','Category Restore Successfully');
+    }
+    public function trashPermanentDeleted($id){
+        Category::onlyTrashed()->findOrFail($id)->forceDelete();
+        return back()->with('danger','Category Permanent Deleted Successfully');
+    }
+    public function categorySelectDeleted(Request $request){
+        foreach ($request->delete as $cat_id) {
+            Category::findOrFail($cat_id)->delete();
+        }
+        return back();
     }
 }

@@ -14,51 +14,35 @@
                   <span>{{Session('success')}}</span>
                 </div>
             @endif
-            @if (Session('delete'))
-                <div class="alert alert-danger">
-                  <span>{{Session('delete')}}</span>
-                </div>
-            @endif
-                <h6 class="card-body-title">Category List</h6>
-                <h5 class="text-center">All Category {{$cat_count}}</h5>
+                <h6 class="card-body-title">Trash List</h6>
                 <div class=""><a href="{{url('admin/category-add')}}" class="btn pull-right"><i class="fa fa-plus"></i> Add Category</a></div>
                 <div class="table-responsive">
-                <table class="table mg-b-0">
-                    <form action="{{url('admin/selected/category-deleted')}}" method="post"> 
+                <table class="table mg-b-0"> 
                     <thead>
                     <tr>
-                        <th>
-                          <button type="submit" class="btn btn-danger">Delete</button>
-                          <input type='checkbox' id="checkAll" value="All">All
-                        </th>
                         <th>Id</th>
                         <th>Category Name</th>
-                        <th>Total Product</th>
                         <th>Created</th>
                         <th>Updated</th>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
-                    @csrf
-                    @foreach($categories as $key => $category)
+                    @foreach($trash_list as $key => $category)
                       <tbody>
                           <tr>
-                            <td><input type="checkbox" name="delete[]" value="{{$category->id}}"></td>
-                            <td>{{$categories->firstItem() + $key}}</td>
+                            <td>{{$trash_list->firstItem() + $key}}</td>
                             <td>{{$category->category_name}}</td>
-                            <td>{{$category->product->count()}}</td>
                             <td>{{$category->created_at != null ? $category->created_at->diffForHumans():'N/A'}}</td>
                             <td>{{$category->updated_at != null ? $category->updated_at->diffForHumans():'N/A'}}</td>
                             <td class="text-center">
-                                <a href="{{url('admin/category-edit')}}/{{$category->id}}" class="btn btn-outline-primary">Edit</a>
-                                <a href="{{url('admin/category-delete')}}/{{$category->id}}" onclick="return confirm('Are You Deleted?')" class="btn btn-outline-danger">Delete</a>
+                                <a href="{{url('admin/category-trash/restore')}}/{{$category->id}}" class="btn btn-outline-primary">Restore</a>
+                                <a href="{{url('admin/category-trash/permanent-deleted')}}/{{$category->id}}" onclick="return confirm('Are You Deleted?')" class="btn btn-outline-danger">Permanent Delete</a>
                             </td>
                         </tr>
                       </tbody>
                     @endforeach
-                    </form>
                 </table>
-                {{$categories->links()}}
+                {{$trash_list->links()}}
                 </div>
             </div><!-- card -->
            

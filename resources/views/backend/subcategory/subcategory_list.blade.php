@@ -19,46 +19,41 @@
                   <span>{{Session('delete')}}</span>
                 </div>
             @endif
-                <h6 class="card-body-title">Category List</h6>
-                <h5 class="text-center">All Category {{$cat_count}}</h5>
-                <div class=""><a href="{{url('admin/category-add')}}" class="btn pull-right"><i class="fa fa-plus"></i> Add Category</a></div>
+                <h6 class="card-body-title">SubCategory List</h6>
+                <h5 class="text-center">All SubCategory {{$subcat_count}}</h5>
+                <div class=""><a href="{{url('admin/subcategory-add')}}" class="btn pull-right"><i class="fa fa-plus"></i> Add SubCategory</a></div>
                 <div class="table-responsive">
-                <table class="table mg-b-0">
-                    <form action="{{url('admin/selected/category-deleted')}}" method="post"> 
+                <table class="table mg-b-0"> 
                     <thead>
                     <tr>
-                        <th>
-                          <button type="submit" class="btn btn-danger">Delete</button>
-                          <input type='checkbox' id="checkAll" value="All">All
-                        </th>
                         <th>Id</th>
-                        <th>Category Name</th>
-                        <th>Total Product</th>
+                        <th>SubCategory Name</th>
+                        <th>Slug</th>
+                        <th>Category</th>
                         <th>Created</th>
                         <th>Updated</th>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
                     @csrf
-                    @foreach($categories as $key => $category)
+                    @foreach($subcategories as $key => $subcategory)
                       <tbody>
                           <tr>
-                            <td><input type="checkbox" name="delete[]" value="{{$category->id}}"></td>
-                            <td>{{$categories->firstItem() + $key}}</td>
-                            <td>{{$category->category_name}}</td>
-                            <td>{{$category->product->count()}}</td>
-                            <td>{{$category->created_at != null ? $category->created_at->diffForHumans():'N/A'}}</td>
-                            <td>{{$category->updated_at != null ? $category->updated_at->diffForHumans():'N/A'}}</td>
+                            <td>{{$subcategories->firstItem() + $key}}</td>
+                            <td>{{$subcategory->subcategory_name}}</td>
+                            <td>{{$subcategory->slug}}</td>
+                            <td>{{$subcategory->category->category_name}}</td>
+                            <td>{{$subcategory->created_at != null ? $subcategory->created_at->diffForHumans():'N/A'}}</td>
+                            <td>{{$subcategory->updated_at != null ? $subcategory->updated_at->diffForHumans():'N/A'}}</td>
                             <td class="text-center">
-                                <a href="{{url('admin/category-edit')}}/{{$category->id}}" class="btn btn-outline-primary">Edit</a>
-                                <a href="{{url('admin/category-delete')}}/{{$category->id}}" onclick="return confirm('Are You Deleted?')" class="btn btn-outline-danger">Delete</a>
+                                <a href="{{route('subCategoryEdit',$subcategory->id)}}" class="btn btn-outline-primary">Edit</a>
+                                <a href="{{route('subCategoryDelete',$subcategory->id)}}" onclick="return confirm('Are You Deleted?')" class="btn btn-outline-danger">Delete</a>
                             </td>
                         </tr>
                       </tbody>
                     @endforeach
-                    </form>
                 </table>
-                {{$categories->links()}}
+                {{$subcategories->links()}}
                 </div>
             </div><!-- card -->
            
