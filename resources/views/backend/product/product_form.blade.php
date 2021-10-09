@@ -42,6 +42,21 @@
                         </div><!-- row -->
                         <br>
                         <div class="row row-xs">
+                            <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Brand Name:</label>
+                            <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                <select class="form-control @error('brand_id') is-invalid @enderror" name="brand_id" id="brand_id">
+                                    <option value>Select Brand</option>
+                                    @foreach ($brands as $item)
+                                        <option value="{{$item->id}}">{{$item->brand_name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('brand_id')
+                                    <div class="alert alert-danger">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div><!-- row -->
+                        <br>
+                        <div class="row row-xs">
                             <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Category Name:</label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
                                 <select class="form-control @error('category_id') is-invalid @enderror" name="category_id" id="category_id">
@@ -84,6 +99,16 @@
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
                                 <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" name="thumbnail">
                                 @error('thumbnail')
+                                    <div class="alert alert-danger">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div><!-- row -->
+                        <br>
+                        <div class="row row-xs">
+                            <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Product Image</label>
+                            <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                <input multiple type="file" class="form-control @error('image') is-invalid @enderror" name="image[]">
+                                @error('image')
                                     <div class="alert alert-danger">{{$message}}</div>
                                 @enderror
                             </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 // use DB;
 
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Str;
@@ -54,6 +55,17 @@ class CategoryController extends Controller
         return back();
     }
     public function categoryDelete($id){
+
+        // $check = Product::where('category_id',$id)->count();
+        // if($check > 0 ){
+        //     $product = Product::where('category_id',$id)->update([
+        //         'category_id' => 1
+        //     ]);
+        //     return "No Delete";
+        // }else{
+        //     return "Deleted";
+        // }
+
         Category::findOrFail($id)->delete();
         return back()->with('delete','Category Deleted Successfully');
     }

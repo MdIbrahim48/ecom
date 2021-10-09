@@ -19,23 +19,33 @@
                             <span>{{Session('success')}}</span>
                         </div>
                       @endif
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form action="{{route('productUpdate')}}" method="post" enctype="multipart/form-data">
                       @csrf
                         <div class="row row-xs">
+                            <input type="hidden" name="product_id" value="{{$products->id}}">
                             <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Product Name</label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title" value="{{$editProducts->title ?? old('title')}}" placeholder="Product Name">
+                                <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" id="title" value="{{$products->title ?? old('title')}}" placeholder="Product Name">
                                 @error('title')
                                     <div class="alert alert-danger">{{$message}}</div>
                                 @enderror
                             </div>
                         </div><!-- row -->
+                        
                         <br>
                         <div class="row row-xs">
-                            <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Product Permalink</label>
+                            <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Brand Name:</label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <input type="text" class="form-control @error('slug') is-invalid @enderror" name="slug" id="slug" value="{{$editProducts->slug ?? old('slug')}}" placeholder="Product Permalink ">
-                                @error('slug')
+                                <select class="form-control @error('brand_id') is-invalid @enderror" name="brand_id" id="brand_id">
+                                    <option value>Select Brand</option>
+                                    @foreach ($brands as $item)
+                                        <option @if ($products->brand_id == $item->id)
+                                            selected
+                                        @endif 
+                                        value="{{$item->id}}">{{$item->brand_name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('brand_id')
                                     <div class="alert alert-danger">{{$message}}</div>
                                 @enderror
                             </div>
@@ -47,7 +57,10 @@
                                 <select class="form-control @error('category_id') is-invalid @enderror" name="category_id" id="category_id">
                                     <option value>Select Category</option>
                                     @foreach ($categories as $item)
-                                        <option value="{{$item->id}}">{{$item->category_name}}</option>
+                                        <option @if ($products->category_id == $item->id)
+                                            selected
+                                        @endif 
+                                        value="{{$item->id}}">{{$item->category_name}}</option>
                                     @endforeach
                                 </select>
                                 @error('category_id')
@@ -61,9 +74,14 @@
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
                                 <select class="form-control @error('subcategory_id') is-invalid @enderror" name="subcategory_id" id="subcategory_id">
                                     <option value>Select SubCategory</option>
-                                    
+                                    @foreach ($subCategories as $item)
+                                        <option @if ($products->subcategory_id == $item->id)
+                                            selected
+                                        @endif 
+                                        value="{{$item->id}}">{{$item->subcategory_name}}</option>
+                                    @endforeach
                                 </select>
-                                @error('category_id')
+                                @error('subcategory_id')
                                     <div class="alert alert-danger">{{$message}}</div>
                                 @enderror
                             </div>
@@ -72,7 +90,7 @@
                         <div class="row row-xs">
                             <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Product Price</label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <input type="text" class="form-control @error('price') is-invalid @enderror" name="price" value="{{$editProducts->price ?? old('price')}}" placeholder="500">
+                                <input type="text" class="form-control @error('price') is-invalid @enderror" name="price" value="{{$products->price ?? old('price')}}" placeholder="500">
                                 @error('price')
                                     <div class="alert alert-danger">{{$message}}</div>
                                 @enderror
@@ -82,8 +100,34 @@
                         <div class="row row-xs">
                             <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Product Thumbnail</label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" name="thumbnail">
+                                <input type="file" class="form-control @error('thumbnail') is-invalid @enderror" name="thumbnail" onchange="document.getElementById('image_id').src = window.URL.createObjectURL(this.files[0])">
                                 @error('thumbnail')
+                                    <div class="alert alert-danger">{{$message}}</div>
+                                @enderror
+                            </div>
+                        </div><!-- row -->
+                        <br>
+                        <div class="row row-xs">
+                            <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Preview Thumbnail</label>
+                            <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                <img width="250px" id="image_id" src="{{asset('images/'.$products->created_at->format('Y/m/').$products->id.'/'.$products->thumbnail)}}" alt="">
+                            </div>
+                        </div><!-- row -->
+                        <br>
+                        <div class="row row-xs">
+                            <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Product Gallery</label>
+                            <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                @foreach ($products->ProductGallery as $pGallery)
+                                    <input type="text" name="gallery_id" id="gallery_id" value="{{$pGallery->id}}">
+                                    <input type="file" class="form-control @error('image') is-invalid @enderror" name="image[]" onchange="document.getElementById('image_id{{$pGallery->id}}').src = window.URL.createObjectURL(this.files[0])">
+                                    <div class="row row-xs">
+                                        <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Preview Gallery</label>
+                                        <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                            <img width="150px" id="image_id{{$pGallery->id}}" src="{{asset('images/product-gallery/'.$pGallery->created_at->format('Y/m/').$pGallery->product_id.'/'.$pGallery->image)}}" alt="">
+                                        </div>
+                                    </div><!-- row -->
+                                @endforeach
+                                @error('image')
                                     <div class="alert alert-danger">{{$message}}</div>
                                 @enderror
                             </div>
@@ -92,7 +136,7 @@
                         <div class="row row-xs">
                             <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Product Summary</label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <textarea name="summary" class="form-control @error('summary') is-invalid @enderror" id="summary" placeholder="Product Summary"></textarea>
+                                <textarea name="summary" class="form-control @error('summary') is-invalid @enderror" id="summary" placeholder="Product Summary">{{$products->summary}}</textarea>
                                 @error('summary')
                                     <div class="alert alert-danger">{{$message}}</div>
                                 @enderror
@@ -102,7 +146,7 @@
                         <div class="row row-xs">
                             <label class="col-sm-4 form-control-label"><span class="tx-danger">*</span> Product Description</label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="summary" placeholder="Product Description"></textarea>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="summary" placeholder="Product Description">{{$products->description}}</textarea>
                                 @error('description')
                                     <div class="alert alert-danger">{{$message}}</div>
                                 @enderror
@@ -112,7 +156,7 @@
                         <div class="row row-xs mg-t-30">
                         <div class="col-sm-8 mg-l-auto">
                             <div class="form-layout-footer">
-                            <button type="submit" class="btn btn-info mg-r-5" style="cursor: pointer">Submit Form</button>
+                            <button type="submit" class="btn btn-info mg-r-5" style="cursor: pointer">Update</button>
                             </div><!-- form-layout-footer -->
                         </div><!-- col-8 -->
                         </div>

@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Route;
@@ -17,13 +19,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
+
+
+Route::get('/',[FrontendController::class,'frontend'])->name('frontend');
+Route::get('product/{slug}',[FrontendController::class,'singleProduct'])->name('singleProduct');
+Route::get('shop',[FrontendController::class,'shop'])->name('shop');
+Route::get('cart',[CartController::class,'cart'])->name('cart');
+Route::get('single/cart/{slug}',[CartController::class,'singleCart'])->name('singleCart');
+
 
 
 Route::get('dashboard',[DashboardController::class,'dashboard'])->name('dashboard');
@@ -55,6 +65,7 @@ Route::get('admin/product-list',[ProductController::class,'productList'])->name(
 Route::get('admin/product-add',[ProductController::class,'productAdd'])->name('productAdd');
 Route::post('admin/product-post',[ProductController::class,'productPost'])->name('productPost');
 Route::get('admin/product-edit/{id}',[ProductController::class,'productEdit'])->name('productEdit');
+Route::post('admin/product-update',[ProductController::class,'productUpdate'])->name('productUpdate');
 
 
 

@@ -34,8 +34,8 @@
                         {{-- <th>Description</th> --}}
                         <th>Price</th>
                         <th>Thumbnail</th>
+                        <th>Images</th>
                         <th>Created</th>
-                        <th>Updated</th>
                         <th class="text-center">Action</th>
                     </tr>
                     </thead>
@@ -47,11 +47,14 @@
                             <td>{{$product->slug}}</td>
                             <td>{{Str::limit($product->summary,20)}}</td>
                             <td>{{$product->category->category_name}}</td>
-                            {{-- <td>{{$product->description	}}</td> --}}
                             <td>{{$product->price	}}</td>
                             <td><img width="100" src="{{asset('images/'.$product->created_at->format('Y/m/').$product->id.'/'.$product->thumbnail)}}" alt="{{$product->title}}"></td>
+                            <td>
+                              @foreach ($product->ProductGallery as $PGallery)
+                                <img width="50" src="{{asset('images/product-gallery/'.$PGallery->created_at->format('Y/m/').$PGallery->product_id.'/'.$PGallery->image)}}" alt="">  
+                              @endforeach
+                            </td>
                             <td>{{$product->created_at != null ? $product->created_at->diffForHumans():'N/A'}}</td>
-                            <td>{{$product->updated_at != null ? $product->updated_at->diffForHumans():'N/A'}}</td>
                             <td class="text-center">
                                 <a href="{{route('productEdit',$product->id)}}" class="btn btn-outline-primary">Edit</a>
                                 {{-- <a href="{{route('subCategoryDelete',$subcategory->id)}}" onclick="return confirm('Are You Deleted?')" class="btn btn-outline-danger">Delete</a> --}}

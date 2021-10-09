@@ -22,6 +22,7 @@ class CreateProductsTable extends Migration
             $table->text('summary');
             $table->text('description');
             $table->string('price');
+            $table->foreignId('brand_id');
             $table->string('thumbnail')->nullable();
             $table->timestamps();
         });
